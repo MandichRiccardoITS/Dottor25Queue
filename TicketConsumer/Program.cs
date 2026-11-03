@@ -2,6 +2,10 @@
 
 Console.WriteLine("== CONSUMER ==");
 
+const int MIN_DELAY = 100;
+const int MAX_DELAY = 10000;
+int delay = MIN_DELAY;
+
 var connectionString = "UseDevelopmentStorage=true";
 var queueName = "tickets";
 
@@ -14,6 +18,7 @@ while (true)
     var message = await client.ReceiveMessageAsync();
     if (message is not null && message.Value is not null)
     {
+        delay = MIN_DELAY;
         Console.WriteLine($"\nReceived message: {message.Value.Body.ToString()}");
         await client.DeleteMessageAsync(
             message.Value.MessageId,
@@ -21,8 +26,13 @@ while (true)
     }
     else
     {
-        await Task.Delay(1000);
-        Console.Write(".");
+        if (delay < MIN_DELAY)
+            delay = MIN_DELAY;
+        await Task.Delay(delay);
+        if (delay < MAX_DELAY)
+            delay *= 2;
+        //Console.Write(".");
+        Console.WriteLine("deley: " + delay);
     }
 }
 
