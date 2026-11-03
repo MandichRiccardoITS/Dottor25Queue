@@ -31,8 +31,7 @@ while (true)
         await Task.Delay(delay);
         if (delay < MAX_DELAY)
             delay *= 2;
-        //Console.Write(".");
-        Console.WriteLine("deley: " + delay);
+        Console.Write(".");
     }
 }
 
